@@ -64,12 +64,31 @@ class CarSlotsTest(unittest.TestCase):
         cars = white_cars + black_cars
         self.create_add_cars(cars)
         
-        # Verify filters
-        _, white_results = self.carslots.filter_by(color="White")
+        # Verify color filters
+        _, white_results = self.carslots.get_cars_by_color(color="White")
         for car in white_results:
             self.assertEqual(car.color, "White")
 
         _, black_results = self.carslots.filter_by(color="Black")
         for car in black_results:
             self.assertEqual(car.color, "Black")
+
+    def test_filter_car_regnum(self):
+        """Test filter cars by registration number attribute should return
+        only one cars matching the specified registration number.
+        """
+        # Setup test variables
+        car1_regnum = "REGNUM-01-01"
+        car2_regnum = "REGNUM-02-02"
+
+        # Create and add test cars
+        self.create_add_car(1, car1_regnum, "ANY-COLOR")
+        self.create_add_car(2, car2_regnum, "ANY-COLOR")
+
+        # Verify regnum filters
+        idx, car1 = self.carslots.get_car_by_regnum(regnum=car1_regnum)
+        self.assertEqual(car1.regnum, car1_regnum)
+        idx2, car2 = self.carslots.get_car_by_regnum(regnum=car2_regnum)
+        self.assertEqual(car2.regnum, car2_regnum)
+
 
