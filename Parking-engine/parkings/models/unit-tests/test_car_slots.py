@@ -11,7 +11,7 @@ class CarSlotsTest(unittest.TestCase):
         self.carslots = CarSlots(size)
 
     def tearDown(self):
-        self.carslots = None
+        self.carslots.wipe_all()
 
     def create_add_car(self, slot_id, regnum, color):
         """ Create a Car object and add into car slots
@@ -73,6 +73,10 @@ class CarSlotsTest(unittest.TestCase):
         for car in black_results:
             self.assertEqual(car.color, "Black")
 
+        # Verify filter result when no matching
+        _, empty_res = self.carslots.get_cars_by_color(color="UNKNOWN")
+        self.assertEqual(len(empty_res), 0)
+
     def test_filter_car_regnum(self):
         """Test filter cars by registration number attribute should return
         only one cars matching the specified registration number.
@@ -91,4 +95,53 @@ class CarSlotsTest(unittest.TestCase):
         idx2, car2 = self.carslots.get_car_by_regnum(regnum=car2_regnum)
         self.assertEqual(car2.regnum, car2_regnum)
 
+        # Verify filter result when no matching
+        _, empty_res = self.carslots.get_car_by_regnum(regnum="UNKNOWN")
+        self.assertIsNone(empty_res)
 
+    def test_leave_car(self):
+        """Test delete car by slot id should remove the car object from the slots 
+        and return the slot id of the removed car when successful.
+        """
+        # Setup test variables
+        slot_id = 4
+        regnum, color = "REGNUM-01-01", "Color-01"
+        slot_id = self.create_add_car(slot_id, regnum, color)
+
+        # Delete car when car is in slot_id
+        idx = self.carslots.delete(slot_id)
+        self.assertEqual(slot_id, idx)
+
+        # Try delete car when car already leave will give -1 signal
+        err_sig = self.carslots.delete(slot_id)
+        self.assertEqual(-1, err_sig)
+
+    def test_full_slots(self):
+        """Test car slots that is full cannot be added. If addition is force
+        when slots is full, then assignment is not successful and return -1 signal
+        """
+        # Setup test variables
+        cars_data = [
+            (1, "RW-01", "White"),
+            (2, "RW-02", "White"),
+            (3, "RW-03", "White"),
+            (4, "BW-04", "Black"),
+            (5, "BW-05", "Black")
+        ]
+        self.create_add_cars(cars_data)
+
+        # Verify slots is full
+        self.assertEqual(self.carslots.size, self.carslots.count_vehicle())
+
+        # Try add one more cars into full slots
+        regnum, color = "Regnum-6", "Yellow"
+        sig = self.carslots.park(regnum, color)
+        
+        # Verify park methods return -1 signal
+        self.assertEqual(-1, sig)
+
+        # Verify car is not assigned anywhere/ override anything
+        idx, car = self.carslots.get_car_by_regnum(regnum)
+        self.assertEqual(-1, idx)
+        self.assertFalse(car)
+    
