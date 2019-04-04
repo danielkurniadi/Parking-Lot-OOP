@@ -50,6 +50,43 @@ class CarSlots(Slots):
     Slots for containing and handle batches of cars.
     """
 
+    def get_car_by_regnum(self, regnum):
+        """Get the first car that match a given registration number specified in the argument
+        Args:
+            regnum (str): car registration number
+        Returns:
+            (int), (Car): if found return tuple of slot id and Car object, else -1 and None
+        """
+        if not regnum:
+            return -1, None
+
+        slot_ids, cars = self.filter_by(regnum=regnum)
+        
+        # Check if there is a match
+        if len(cars)<1:
+            return -1, None
+        
+        # Return first car if there are many matches/results
+        slot_id, car = slot_ids[0], cars[0]
+        return slot_id, car
+
+    def get_cars_by_color(self, color):
+        """Filter cars by a specified color
+        Args:
+            color(str)
+        Returns:
+            int
+        """
+        if not color:
+            return [], []
+        slot_ids, cars = self.filter_by(color=color)
+
+        return slot_ids, cars
+
+    ################################################
+    # Utility
+    ################################################
+
     def filter_by(self, regnum=None, color=None):
         """Filtering car in slots by car attributes that are specified. Pass all cars in slots 
         if no attribute is specified.
