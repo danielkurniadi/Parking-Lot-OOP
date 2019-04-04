@@ -65,11 +65,11 @@ class CarSlotsTest(unittest.TestCase):
         self.create_add_cars(cars)
         
         # Verify filters
-        white_results = self.carslots.filter_by(color="White")
+        _, white_results = self.carslots.filter_by(color="White")
         for car in white_results:
             self.assertEqual(car.color, "White")
 
-        black_results = self.carslots.filter_by(color="Black")
+        _, black_results = self.carslots.filter_by(color="Black")
         for car in black_results:
             self.assertEqual(car.color, "Black")
 
