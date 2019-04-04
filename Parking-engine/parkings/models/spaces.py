@@ -35,4 +35,6 @@ class Slots(object):
         self._slots[slot_id-1] = vehicle
         return slot_id
 
+class CarSlots(Slots):
+    pass
 
