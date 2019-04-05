@@ -34,6 +34,7 @@ class Slots(object):
             return slot_id
         return -1
 
+    # abstract class method
     def is_slot_empty(self, slot_id):
         """ Check if slot is empty
         Args:
@@ -44,11 +45,51 @@ class Slots(object):
             return False
         return True
 
+    # abstract class method
+    def count_vehicle(self):
+        """Counting number of vehicle (not None object) in slots array
+        """
+        count, size = 0, self.size
+        for slot_id in range(1, size+1):
+            if self.get(slot_id):
+                count +=1
+        return count
+
+    # abstract class method
+    def delete(self, slot_id):
+        """Delete a vehicle 
+        """
+        if self.is_slot_empty(slot_id):
+            return -1
+        
+        self._slots[slot_id-1] = None
+        return slot_id
+
+    # abstract class method
+    def wipe_all(self):
+        """ Delete all vehicles in the slots 
+        """
+        for i in range(self.size):
+            self.delete(i+1)
+
+#####################################################################################
 
 class CarSlots(Slots):
     """
-    Slots for containing and handle batches of cars.
+    1-Dimensional Slots for containing and handle batches of cars.
     """
+    
+    def park(self, regnum, color):
+        slot_id = self.get_nearest_available_id()
+
+        # Check if there is slot available
+        if slot_id != -1:
+            car = Car(regnum, color)
+            slot_id = self.add(slot_id, car)
+        else:
+            slot_id = -1
+        
+        return slot_id
 
     def get_car_by_regnum(self, regnum):
         """Get the first car that match a given registration number specified in the argument
@@ -109,4 +150,11 @@ class CarSlots(Slots):
 
         return slot_ids, results
 
-    
+    def get_nearest_available_id(self):
+        """Get nearest slot number to the parking gate that is available
+        """
+        # iterate through slots in order
+        for i in range(self.size):
+            if not self._slots[i]:
+                return i+1  # slot id start at 1
+        return -1
