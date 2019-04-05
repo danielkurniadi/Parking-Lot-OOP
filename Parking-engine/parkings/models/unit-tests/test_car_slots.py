@@ -181,4 +181,70 @@ class CarSlotsTest(unittest.TestCase):
         # nearest to parking gate, which was from deleted car
         park_idx = self.carslots.park(*new_car_data)
         self.assertEqual(del_idx, park_idx)
+
+       def test_no_matches_query(self):
+        """Test query mixins helper methods. Verify that when no matches found, 
+        query returns appropriate signal indicating no match.
+
+        Signal: -1 (int) or None (object) for single query, 
+                [] if for bulk query result.
+        """
+        # start with empty slots, 
+        # then query the slots and expect to get no match
+        regnums = self.carslots.query_regnums_by_color("Color-99")
+        self.assertEqual(len(regnums), 0)
+
+        ids = self.carslots.query_slotids_by_color("Color-99")
+        self.assertEqual(len(ids), 0)
+
+        idx = self.carslots.query_slotid_by_regnum("Regnum-99")
+        self.assertEqual(idx, -1)
+
+    def test_queries_by_color(self):
+        """Test query by color methods from mixins. Verify that when matches found, 
+        query returns correct values.
+        """
+        # Prepare cars for query test
+        white_cars = [
+            ("RW-01", "White"),
+            ("RW-02", "White"),
+            ("RW-03", "White"),
+        ]
         
+        black_cars = [
+            ("BW-04", "Black"),
+            ("BW-05", "Black")
+        ]
+
+        # Park cars for query test
+        for car in (white_cars + black_cars):
+            self.carslots.park(*car)
+        
+        # Querying regnum from cars' color: White
+        query_res = self.carslots.query_regnums_by_color("White")
+        self.assertEqual(query_res, [car[0] for car in white_cars])
+        
+        # Querying regnum from cars' color: Black
+        query_res = self.carslots.query_regnums_by_color("Black")
+        self.assertEqual(query_res, [car[0] for car in black_cars])
+
+    def test_queries_by_regnum(self):
+        # Prepare cars for query test
+        cars_data = [
+            ("RW-91", "White"),
+            ("RW-92", "White"),
+            ("RW-93", "White"),
+            ("BW-04", "Black"),
+            ("BW-05", "Black")
+        ]
+
+        # Park cars for query test
+        for car in cars_data:
+            self.carslots.park(*car)
+        
+        # Querying regnum from car (unique) registration number
+        for i, (regnum, _) in enumerate(cars_data):
+            slot_id = i+1
+            query_res = self.carslots.query_slotid_by_regnum(regnum)
+            self.assertEqual(query_res, slot_id)
+
