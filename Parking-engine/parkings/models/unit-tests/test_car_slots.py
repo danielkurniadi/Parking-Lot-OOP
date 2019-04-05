@@ -182,9 +182,8 @@ class CarSlotsTest(unittest.TestCase):
         park_idx = self.carslots.park(*new_car_data)
         self.assertEqual(del_idx, park_idx)
 
-       def test_no_matches_query(self):
-        """Test query mixins helper methods. Verify that when no matches found, 
-        query returns appropriate signal indicating no match.
+    def test_no_matches_query(self):
+        """When query has no matches found, query returns appropriate signal indicating no match.
 
         Signal: -1 (int) or None (object) for single query, 
                 [] if for bulk query result.
@@ -201,7 +200,7 @@ class CarSlotsTest(unittest.TestCase):
         self.assertEqual(idx, -1)
 
     def test_queries_by_color(self):
-        """Test query by color methods from mixins. Verify that when matches found, 
+        """Query by color methods from mixins. Verify that when matches found, 
         query returns correct values.
         """
         # Prepare cars for query test
@@ -229,7 +228,7 @@ class CarSlotsTest(unittest.TestCase):
         self.assertEqual(query_res, [car[0] for car in black_cars])
 
     def test_queries_by_regnum(self):
-        # Prepare cars for query test
+        # Setup and prepare cars for query test
         cars_data = [
             ("RW-91", "White"),
             ("RW-92", "White"),
@@ -238,7 +237,7 @@ class CarSlotsTest(unittest.TestCase):
             ("BW-05", "Black")
         ]
 
-        # Park cars for query test
+        # Create cars and park them for query test
         for car in cars_data:
             self.carslots.park(*car)
         
@@ -247,4 +246,31 @@ class CarSlotsTest(unittest.TestCase):
             slot_id = i+1
             query_res = self.carslots.query_slotid_by_regnum(regnum)
             self.assertEqual(query_res, slot_id)
+
+    def test_status(self):
+        """Status returns all registration and color pair representing every car in
+        the car slots (parking lot). 
+        """
+        # Setup and prepare cars for query test
+        cars_data = [
+            ("RW-31", "White"),
+            ("RW-32", "Yellow"),
+            ("RW-33", "White"),
+            ("BW-34", "Black"),
+            ("BW-35", "Black")
+        ]
+
+        # Create cars and park them for query test
+        for car in cars_data:
+            self.carslots.park(*car)
+
+        # Get status and verify the status information is correct
+        status = self.carslots.status()
+        for i, (regnum, color) in enumerate(cars_data):
+            slot_id, res_regnum, res_color = status[i]
+            # Check regnum and color value
+            self.assertEqual(res_regnum, regnum)
+            self.assertEqual(res_color, color)
+            # Check slot id value
+            self.assertEqual(i+1, slot_id)
 
