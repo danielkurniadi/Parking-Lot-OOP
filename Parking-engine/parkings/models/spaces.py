@@ -1,3 +1,6 @@
+from parkings.models.vehicle import Car
+from parkings.models.helpers.query_mixins import CarsQueryMixin
+
 class Slots(object):
     """
     Abstract class for any vehicle 1-dimensional containers 
@@ -74,7 +77,7 @@ class Slots(object):
 
 #####################################################################################
 
-class CarSlots(Slots):
+class CarSlots(Slots, CarsQueryMixin):
     """
     1-Dimensional Slots for containing and handle batches of cars.
     """
