@@ -7,10 +7,14 @@ from parkings.models.spaces import CarSlots
 class CarSlotsTest(unittest.TestCase):
 
     def setUp(self):
+        """Set CarSlots object for each test
+        """
         size = 5
         self.carslots = CarSlots(size)
 
     def tearDown(self):
+        """Clean and delete data from previous test
+        """
         self.carslots.wipe_all()
 
     def create_add_car(self, slot_id, regnum, color):
@@ -19,6 +23,11 @@ class CarSlotsTest(unittest.TestCase):
         car = Car(regnum, color)
         idx = self.carslots.add(slot_id, car)
         return idx
+
+    def park_cars(self, cars_data):
+        """ Park multiple cars into car slots
+        """
+        return [self.carslots.park(regnum, color) for regnum, color in cars_data]
 
     def create_add_cars(self, cars_data):
         """ Create and add multiple Cars object to slots
@@ -50,19 +59,19 @@ class CarSlotsTest(unittest.TestCase):
         """
         # Setup test variables
         white_cars = [
-            (1, "RW-01", "White"),
-            (2, "RW-02", "White"),
-            (3, "RW-03", "White"),
+            ("RW-01", "White"),
+            ("RW-02", "White"),
+            ("RW-03", "White"),
         ]
         
         black_cars = [
-            (4, "BW-04", "Black"),
-            (5, "BW-05", "Black")
+            ("BW-04", "Black"),
+            ("BW-05", "Black")
         ]
 
         # Create all test cars
         cars = white_cars + black_cars
-        self.create_add_cars(cars)
+        self.park_cars(cars)
         
         # Verify color filters
         _, white_results = self.carslots.get_cars_by_color(color="White")
@@ -122,13 +131,13 @@ class CarSlotsTest(unittest.TestCase):
         """
         # Setup test variables
         cars_data = [
-            (1, "RW-01", "White"),
-            (2, "RW-02", "White"),
-            (3, "RW-03", "White"),
-            (4, "BW-04", "Black"),
-            (5, "BW-05", "Black")
+            ("RW-01", "White"),
+            ("RW-02", "White"),
+            ("RW-03", "White"),
+            ("BW-04", "Black"),
+            ("BW-05", "Black")
         ]
-        self.create_add_cars(cars_data)
+        self.park_cars(cars_data)
 
         # Verify slots is full
         self.assertEqual(self.carslots.size, self.carslots.count_vehicle())
@@ -144,4 +153,32 @@ class CarSlotsTest(unittest.TestCase):
         idx, car = self.carslots.get_car_by_regnum(regnum)
         self.assertEqual(-1, idx)
         self.assertFalse(car)
-    
+
+    def test_park_slot_assignment(self):
+        """When a car is added to one of the slots using park method,
+        the car should be assigned to empty slot nearest to parking gate
+        """
+        # Setup test variables on initially empty slots
+        n_cars = 5
+        cars_data = [
+            ("RW-01", "White"),
+            ("RW-02", "White"),
+            ("RW-03", "White"),
+            ("BW-04", "Black"),
+            ("BW-05", "Black")
+        ]
+        new_car_data = ("NW-06", "Yellow")
+
+        # Park all cars to fill all slots and get the slot numbers
+        # then verify that slot numbers is given in increment order.
+        ids = self.park_cars(cars_data)
+        self.assertEqual(ids, [i for i in range(1, n_cars+1)])
+
+        # Delete a car in the middle and get the slot number which becomes empty
+        del_idx = self.carslots.delete(2)
+
+        # Park a new car in and verify that this car is assigned to the slot
+        # nearest to parking gate, which was from deleted car
+        park_idx = self.carslots.park(*new_car_data)
+        self.assertEqual(del_idx, park_idx)
+        
