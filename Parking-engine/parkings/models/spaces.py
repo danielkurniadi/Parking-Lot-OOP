@@ -6,13 +6,23 @@ class Slots(object):
     Abstract class for any vehicle 1-dimensional containers 
     """
 
-    def __init__(self, size):
+    def __init__(self, size=0):
         self._size = size
         self._slots = [None]* self._size
 
     @property
     def size(self):
         return self._size
+
+    # abstract class method
+    def start_new(self, size):
+        """ Start new parking lot or reset.
+        Args:
+            size (int): size of parking lot.
+        """
+        self._size = size
+        self._slots = [None]* self._size
+        return size
 
     # abstract class method
     def get(self, slot_id):
@@ -88,7 +98,7 @@ class CarSlots(Slots, CarsQueryMixin):
     Representation of parking lot model. 1-Dimensional parking slots that
     handle batch of cars.
     """
-    
+
     def park(self, regnum, color):
         slot_id = self.get_nearest_available_id()
 
