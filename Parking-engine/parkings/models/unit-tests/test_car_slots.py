@@ -35,6 +35,17 @@ class CarSlotsTest(unittest.TestCase):
         for slot_id, regnum, color in cars_data:
             self.create_add_car(slot_id, regnum, color)
 
+    ###############################################################################
+
+    def test_start_new(self):
+        """Test start new or reset the slots will create empty slots with specified size.
+        """
+        expsize = 6 #expected size
+        newsize = self.carslots.start_new(expsize)
+
+        self.assertEqual(expsize, newsize)
+        self.assertEqual(self.carslots.count_vehicle(), 0)
+
     def test_add_car(self):
         """Test adding a new car to the slots returns
         the correct slot id
