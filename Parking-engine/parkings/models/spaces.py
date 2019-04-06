@@ -16,12 +16,18 @@ class Slots(object):
 
     # abstract class method
     def get(self, slot_id):
-        """ Get a car at slot with specified number.
+        """ Get an item at slots with specified number.
         Args:
             slot_id (int)
         Returns: (int)
         """
         return self._slots[slot_id-1]
+
+    def get_all(self):
+        """ Get all items in the slots
+        Returns: [Vehicle] list of vehicle object
+        """
+        return [item for item in self._slots]
 
     # abstract class method
     def add(self, slot_id, vehicle):
@@ -79,7 +85,8 @@ class Slots(object):
 
 class CarSlots(Slots, CarsQueryMixin):
     """
-    1-Dimensional Slots for containing and handle batches of cars.
+    Representation of parking lot model. 1-Dimensional parking slots that
+    handle batch of cars.
     """
     
     def park(self, regnum, color):
@@ -93,6 +100,16 @@ class CarSlots(Slots, CarsQueryMixin):
             slot_id = -1
         
         return slot_id
+
+    def status(self):
+        """Get status of all cars in car slots (parking lot)
+        Returns:
+            [(str), (str)]: list of tuple (regnum, color)
+        """
+        # Safe shorcuts to get all Car object != None.
+        # Add +1 to id since output is slot number
+        cars = self.get_all()
+        return [(i+1, car.regnum, car.color) for i, car in enumerate(cars) if car]
 
     def get_car_by_regnum(self, regnum):
         """Get the first car that match a given registration number specified in the argument
