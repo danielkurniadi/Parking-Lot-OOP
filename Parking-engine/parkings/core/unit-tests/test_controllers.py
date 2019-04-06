@@ -44,5 +44,15 @@ class ControllerTests(unittest.TestCase):
 
     #############################################################################
 
+    def test_execute_start_new(self):
+        """Command object is able to execute start new parking lot.
+        """
+        # Setup params
+        n_slots = 10
+        start_new_cmd = "create_parking_lot"
+        start_new_args = (n_slots,)
 
+        # Verify command is able to execute start new parking lot
+        output = self.controller.execute(start_new_cmd, *start_new_args)
+        self.assertEqual(output, n_slots)
 
