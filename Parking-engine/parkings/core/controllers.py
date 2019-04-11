@@ -20,6 +20,15 @@ class BaseController():
                 "func": parking_lot.start_new,
                 "formater": self.format_start_new_output
                 },
+            Command.PARK: {
+                "func": parking_lot.park,
+                "formater": self.format_park_output
+                },
+            Command.LEAVE: {
+                "func": parking_lot.purge,
+                "formater": self.format_purge_output
+                },
+            
         }
 
     # abstract class method
