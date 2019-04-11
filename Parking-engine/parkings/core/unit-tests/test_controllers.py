@@ -56,3 +56,39 @@ class ControllerTests(unittest.TestCase):
         output = self.controller.execute(start_new_cmd, *start_new_args)
         self.assertEqual(output, n_slots)
 
+    def test_execute_park_car(self):
+        """Command object is able to execute park car 
+        """
+        # Setup params
+        n_slots = 2
+        park_cmd = "park"
+        cars_args = [
+            ("REG-NUM-01", "Color-1"),
+            ("REG-NUM-02", "Color-2")
+        ]
+        # Prepare parking lot
+        self.prepare_empty_lot(n_slots)
+
+        # Park car 0
+        slot_id = self.controller.execute(park_cmd, *cars_args[0])
+        self.assertEqual(slot_id, 1)
+
+        # Park car 1
+        slot_id = self.controller.execute(park_cmd, *cars_args[1])
+        self.assertEqual(slot_id, 2)
+
+    def test_execute_leave_car(self):
+        """Command object is able to execute delete/leave car command.
+        """
+        # Setup params
+        n_slots = 3
+        leave_cmd = "leave"
+        self.prepare_cars(n_slots)
+
+        # Verify command is able execute purge command for all cars
+        for i in range(1, n_slots+1):
+            slot_id = self.controller.execute(leave_cmd, *(i,))
+        
+        # Verify parking lot is empty
+        car_count = self.parking_lot.count_cars()
+        self.assertEqual(car_count, 0)
