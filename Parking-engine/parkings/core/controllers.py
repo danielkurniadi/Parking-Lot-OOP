@@ -26,31 +26,31 @@ class Controller(BaseController, FormatSupport):
         self.CMD_MAP = {
             Command.CREATE: {
                 "func": parking_lot.start_new,
-                "formater": self.format_start_new_output
+                "formatter": self.format_start_new_output
                 },
             Command.PARK: {
                 "func": parking_lot.park,
-                "formater": self.format_park_output
+                "formatter": self.format_park_output
                 },
             Command.LEAVE: {
                 "func": parking_lot.delete,
-                "formater": self.format_leave_output
+                "formatter": self.format_leave_output
                 },
             Command.STATUS: {
                 "func": parking_lot.status,
-                "formater": self.format_status_output
+                "formatter": self.format_status_output
                 },
             Command.QUERY_REGNUMS_BY_COLOR: {
                 "func": parking_lot.query_regnums_by_color,
-                "formater": self.format_query_many_output
+                "formatter": self.format_query_many_output
                 },
             Command.QUERY_SLOTNUM_BY_REGNUM: {
                 "func": parking_lot.query_slotid_by_regnum,
-                "formater": self.format_query_single_output
+                "formatter": self.format_query_single_output
                 },
             Command.QUERY_SLOTNUMS_BY_COLOR: {
                 "func": parking_lot.query_slotids_by_color,
-                "formater": self.format_query_many_output
+                "formatter": self.format_query_many_output
                 }
         }
 
@@ -73,4 +73,20 @@ class Controller(BaseController, FormatSupport):
         except KeyError:
             raise Exception("COMMAND NOT FOUND: {}".format(cmd_string))
 
+    def process_output(self, cmd_string, resp):
+        """Process the response to formated output given the command 
+        type related to the output.
 
+        Args:
+            cmd_string (str): the string representing a command
+        """
+        try:
+            func = self.CMD_MAP[cmd_string]["formatter"]
+            # Format output and pass processed output to session
+            output = None
+            # function receive a response which can be single or multiple items
+            output = func(resp)
+            return output
+        
+        except KeyError:
+            raise Exception("Format function not implemented/ not available for the specified command")
