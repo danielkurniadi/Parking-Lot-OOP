@@ -1,3 +1,4 @@
+EXC_NOT_FOUND_INT = -1
 
 class Command():
     """Command wrapper for command input. This wrapper unifies all input, 

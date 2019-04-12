@@ -1,6 +1,7 @@
 import unittest
 
 from parkings.core.commands import Command
+from parkings.core.commands import EXC_NOT_FOUND_INT
 from parkings.core.controllers import Controller
 from parkings.models.vehicle import Car
 from parkings.models.spaces import CarSlots
