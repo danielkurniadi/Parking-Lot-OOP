@@ -33,6 +33,13 @@ MANIFEST
 *.manifest
 *.spec
 
+# Virtual Environment
+.virtualenv/
+
+# Assets
+*.pdf
+*.txt
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
