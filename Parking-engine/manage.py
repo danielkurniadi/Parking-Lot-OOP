@@ -8,11 +8,9 @@ from parkings.models.vehicle import Car
 def parsecmd():
     if len(sys.argv)>1:
         IMode = False
-        print("File argument detected\n")
         return IMode, str(sys.argv[1])
     else:
         IMode = True
-        print("Interactive mode detected\n")
         return IMode, ""
 
 def main():

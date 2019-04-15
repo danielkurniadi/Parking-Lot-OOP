@@ -4,6 +4,7 @@ from parkings.core.controllers import Controller
 from parkings.models.spaces import CarSlots as ParkingLot
 
 EXIT_SIG = "Exit"
+DEBUG = False
 
 class Session():
     def __init__(self, is_inter=False, filepath=""):
@@ -24,12 +25,13 @@ class Session():
         self._reader = sys.stdin if is_inter else open(filepath, "r")
 
     def run(self):
-        if self.is_interactive:
-            print("Starting interactive mode...")
-            print("Type your commands below:")
-        else:
-            print("Reading from file input...")
-            print("Processing... Here are the results:")
+        if DEBUG:
+            if self.is_interactive:
+                print("Starting interactive mode...")
+                print("Type your commands below:")
+            else:
+                print("Reading from file input...")
+                print("Processing... Here are the results:")
 
         # Check whether session should keep running or exit
         while True:
@@ -50,9 +52,6 @@ class Session():
             # Write command to STDOUT
             success, output = self.controller.process_output(cmd_string, resp)
             print(output)
-
-        if self._is_interactive:
-            print("Good bye, :)")
 
         return
 
