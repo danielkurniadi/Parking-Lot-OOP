@@ -45,9 +45,13 @@ class Session():
             # print(cmd_string, args)
             if not args:
                 # print("STATUS")
-                resp = self.controller.execute(cmd_string)
+                success, resp = self.controller.execute(cmd_string)
             else:
-                resp = self.controller.execute(cmd_string, *args)
+                success, resp = self.controller.execute(cmd_string, *args)
+
+            if not success:
+                print(resp)
+                break
 
             # Write command to STDOUT
             success, output = self.controller.process_output(cmd_string, resp)

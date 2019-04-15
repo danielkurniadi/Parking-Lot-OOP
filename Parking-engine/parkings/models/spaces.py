@@ -91,7 +91,9 @@ class Slots(object):
         for i in range(self.size):
             self.delete(i+1)
 
+
 #####################################################################################
+
 
 class CarSlots(Slots, CarsQueryMixin):
     """
@@ -103,11 +105,8 @@ class CarSlots(Slots, CarsQueryMixin):
         slot_id = self.get_nearest_available_id()
 
         # Check if there is slot available
-        if slot_id != -1:
-            car = Car(regnum, color)
-            slot_id = self.add(slot_id, car)
-        else:
-            slot_id = -1
+        car = Car(regnum, color)
+        slot_id = self.add(slot_id, car)
         
         return slot_id
 

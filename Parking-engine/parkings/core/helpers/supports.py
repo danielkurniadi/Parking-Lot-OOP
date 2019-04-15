@@ -1,4 +1,4 @@
-from parkings.core.commands import Command, EXT_SIG_INT
+from parkings.core.commands import Command, EXC_NOT_FOUND_INT
 from parkings.models.spaces import CarSlots
 
 class FormatSupport():
@@ -7,7 +7,7 @@ class FormatSupport():
         OUT_SKELETON = "Created a parking lot with {} slots"
         FAIL_CREATE_ERROR_MSG = "Failed to create a parking lot"
 
-        if resp == EXT_SIG_INT:
+        if resp == EXC_NOT_FOUND_INT:
             success = False
             return success, FAIL_CREATE_ERROR_MSG
 
@@ -18,7 +18,7 @@ class FormatSupport():
         OUT_SKELETON = "Allocated slot number: {}"
         FULL_EXC_MSG = "Sorry, parking lot is full"
 
-        if resp == EXT_SIG_INT:
+        if resp == EXC_NOT_FOUND_INT:
             success = False
             return success, FULL_EXC_MSG
 
@@ -29,7 +29,7 @@ class FormatSupport():
         OUT_SKELETON = "Slot number {} is free"
         ERROR_MSG = "Failed to delete car from slot number {}"
 
-        if resp == EXT_SIG_INT:
+        if resp == EXC_NOT_FOUND_INT:
             success = False
             return success, ERROR_MSG.format(resp)
 
@@ -49,7 +49,7 @@ class FormatSupport():
 
     def format_query_single_output(self, resp):
         NOT_FOUND_MSG = "Not found"
-        if resp and resp != EXT_SIG_INT:
+        if resp and resp != EXC_NOT_FOUND_INT:
             success = True
             return success, resp
 

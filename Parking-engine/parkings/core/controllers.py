@@ -4,7 +4,10 @@ from parkings.models.spaces import CarSlots
 
 from parkings.core.helpers.supports import FormatSupport
 
-
+EXIT_SIG = "EXIT"
+EXIT_SIG1 = "Exit"
+EXIT_SIG2 = "\n"
+EXIT_SIG3 = ""
 
 class BaseController():
     def execute(self, cmd_string, *args):
@@ -63,15 +66,17 @@ class Controller(BaseController, FormatSupport):
 
         Returns: the response from parking lot for a specific command
         """
+        success = True
         try:
             func = self.CMD_MAP[cmd_string]["func"]
             # Execute and pass argument args if args is not none
             resp = None
             resp = func() if not args else func(*args)
-            return resp
+            return success, resp
 
         except KeyError:
-            raise Exception("COMMAND NOT FOUND: {}".format(cmd_string))
+            success = False
+            return success, "COMMAND NOT FOUND: {}".format(cmd_string)
 
     def process_output(self, cmd_string, resp):
         """Process the response to formated output given the command 
@@ -89,4 +94,6 @@ class Controller(BaseController, FormatSupport):
             return output
         
         except KeyError:
-            raise Exception("Format function not implemented/ not available for the specified command")
+            success = False
+            return success, "Format function not implemented/ not available for the specified command"
+             
