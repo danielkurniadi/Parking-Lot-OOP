@@ -5,25 +5,24 @@ from parkings.client.session import Session
 from parkings.models.spaces import CarSlots as ParkingLot
 from parkings.models.vehicle import Car
 
-INTERACTIVE_MODE = True
-
 def parsecmd():
     if len(sys.argv)>1:
-        INTERACTIVE_MODE = False
+        IMode = False
         print("File argument detected\n")
-        return str(sys.argv[1])
+        return IMode, str(sys.argv[1])
     else:
+        IMode = True
         print("Interactive mode detected\n")
-        return ""
+        return IMode, ""
 
 def main():
     client = None
-    filepath = parsecmd()
+    IMode, filepath = parsecmd()
     
     # Route the program to the client based on interactivity. 
     # if input file is used, session run on non-interactive mode.
     # If terminal is used to key in the inputs by user, program is in non interactive mode. 
-    if INTERACTIVE_MODE:
+    if IMode:
         # if interactive mode
         session = Session(is_inter=True)
     else:

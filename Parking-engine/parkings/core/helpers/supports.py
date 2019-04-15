@@ -27,7 +27,7 @@ class FormatSupport():
 
     def format_leave_output(self, resp):
         OUT_SKELETON = "Slot number {} is free"
-        ERROR_MSG = "Failed to delete car from slot number {}"
+        ERROR_MSG = "Slot number is already empty"
 
         if resp == EXC_NOT_FOUND_INT:
             success = False

@@ -1,7 +1,5 @@
-# Add script to:
-# * Install dependencies
-# * Build/Compile
-# * Run Test Suit to validate
-#
-# After this is run, bin/parking_lot
-# should Just Work.
+#!/bin/bash
+
+source ./bin/start_virtualenv.sh
+cd ./Parking-engine
+python3 -m nose
