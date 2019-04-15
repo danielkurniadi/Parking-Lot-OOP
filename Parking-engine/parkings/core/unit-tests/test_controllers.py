@@ -55,7 +55,7 @@ class ControllerExecuteTests(unittest.TestCase):
         start_new_args = (n_slots,)
 
         # Verify command is able to execute start new parking lot
-        output = self.controller.execute(start_new_cmd, *start_new_args)
+        _, output = self.controller.execute(start_new_cmd, *start_new_args)
         self.assertEqual(output, n_slots)
 
     def test_execute_park_car(self):
@@ -72,11 +72,11 @@ class ControllerExecuteTests(unittest.TestCase):
         self.prepare_empty_lot(n_slots)
 
         # Park car 0
-        slot_id = self.controller.execute(park_cmd, *cars_args[0])
+        _, slot_id = self.controller.execute(park_cmd, *cars_args[0])
         self.assertEqual(slot_id, 1)
 
         # Park car 1
-        slot_id = self.controller.execute(park_cmd, *cars_args[1])
+        _, slot_id = self.controller.execute(park_cmd, *cars_args[1])
         self.assertEqual(slot_id, 2)
 
     def test_execute_leave_car(self):
@@ -89,7 +89,8 @@ class ControllerExecuteTests(unittest.TestCase):
 
         # Verify command is able execute purge command for all cars
         for i in range(1, n_slots+1):
-            slot_id = self.controller.execute(leave_cmd, *(i,))
+            success, slot_id = self.controller.execute(leave_cmd, *(i,))
+            self.assertTrue(success)
         
         # Verify parking lot is empty
         car_count = self.parking_lot.count_vehicle()

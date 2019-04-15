@@ -4,10 +4,7 @@ from parkings.models.spaces import CarSlots
 
 from parkings.core.helpers.supports import FormatSupport
 
-EXIT_SIG = "EXIT"
-EXIT_SIG1 = "Exit"
-EXIT_SIG2 = "\n"
-EXIT_SIG3 = ""
+EXIT_SIG = "Exit"
 
 class BaseController():
     def execute(self, cmd_string, *args):

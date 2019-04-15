@@ -6,7 +6,7 @@ from parkings.core.controllers import Controller
 from parkings.models.spaces import CarSlots
 from parkings.models.vehicle import Car
 
-from parkings.client.session import Session, EXIT_SIG1
+from parkings.client.session import Session, EXIT_SIG
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -70,15 +70,15 @@ class NonInteractiveSessionTests(unittest.TestCase):
         inputs = f.readline()
         # Parse input and verify
         parsed_inputs = self.session.parse_inputs(inputs)
-        self.assertEqual(parsed_inputs, EXIT_SIG1)
+        self.assertEqual(parsed_inputs, EXIT_SIG)
 
     def test_get_method_on_empty(self):
         """Parsing and getting empty inputs using `get_command_and_args()` 
         should be run smoothly without error
         """
         # Get command and args
-        parsed_inputs = self.session.get_command_and_args()
-        self.assertEqual(parsed_inputs, EXIT_SIG1)
+        parsed_inputs = self.session.get_raw_inputs()
+        self.assertEqual(parsed_inputs, EXIT_SIG)
 
     def test_run_empty_input(self):
         """Running session using `run()` method when file inputs is empty (no content)

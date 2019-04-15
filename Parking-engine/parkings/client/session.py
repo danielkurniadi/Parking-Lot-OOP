@@ -3,10 +3,7 @@ from parkings.core.commands import Command
 from parkings.core.controllers import Controller
 from parkings.models.spaces import CarSlots as ParkingLot
 
-EXIT_SIG = "EXIT"
-EXIT_SIG1 = "Exit"
-EXIT_SIG2 = "\n"
-EXIT_SIG3 = ""
+EXIT_SIG = "Exit"
 
 class Session():
     def __init__(self, is_inter=False, filepath=""):
@@ -33,18 +30,15 @@ class Session():
         else:
             print("Reading from file input...")
             print("Processing... Here are the results:")
-        # Get and parse inputs from users
 
         # Check whether session should keep running or exit
         while True:
-            rawinput = self.get_raw_inputs()
-            if rawinput.strip().lower() in [EXIT_SIG.lower(), EXIT_SIG2, EXIT_SIG3]:
-                break 
+            inputs = self.get_raw_inputs()
+            if not inputs or inputs == EXIT_SIG:
+                break
 
-            cmd_string, args = self.parse_inputs(rawinput.split())
-            # print(cmd_string, args)
+            cmd_string, args = self.parse_inputs(inputs)
             if not args:
-                # print("STATUS")
                 success, resp = self.controller.execute(cmd_string)
             else:
                 success, resp = self.controller.execute(cmd_string, *args)
@@ -64,10 +58,15 @@ class Session():
 
     def get_raw_inputs(self):
         input_line = self._reader.readline()
-        return input_line
+        if (not input_line) or (input_line == EXIT_SIG):
+            return EXIT_SIG
+
+        return input_line.split()
 
     def parse_inputs(self, inputs):
         # Check if no string in inputs
+        if len(inputs) < 1:
+            return EXIT_SIG
 
         cmd_string = inputs[0]
         # Check if only one word in inputs
