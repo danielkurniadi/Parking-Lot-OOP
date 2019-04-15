@@ -6,6 +6,7 @@ __pycache__/
 
 # Specific file
 guide.pdf
+*.txt
 
 # Distribution / packaging
 .Python
