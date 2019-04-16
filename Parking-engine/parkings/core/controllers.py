@@ -71,9 +71,13 @@ class Controller(BaseController, FormatSupport):
             resp = func() if not args else func(*args)
             return success, resp
 
+        except TypeError:
+            success = False
+            return success, "E: Arguments input is wrong (custom error)."
+
         except KeyError:
             success = False
-            return success, "COMMAND NOT FOUND: {}".format(cmd_string)
+            return success, "E: Command not found: {} (custom error).".format(cmd_string)
 
     def process_output(self, cmd_string, resp):
         """Process the response to formated output given the command 
@@ -91,6 +95,9 @@ class Controller(BaseController, FormatSupport):
             return output
         
         except KeyError:
+            # Remember to implement formatting as well if 
+            # new command other than the 7 commands is added for 
+            # extendability
             success = False
-            return success, "Format function not implemented/ not available for the specified command"
+            return success, output
              

@@ -5,6 +5,7 @@ from parkings.models.spaces import CarSlots as ParkingLot
 
 EXIT_SIG = "Exit"
 DEBUG = False
+IGN_FAIL = True
 
 class Session():
     def __init__(self, is_inter=False, filepath=""):
@@ -36,6 +37,7 @@ class Session():
         # Check whether session should keep running or exit
         while True:
             inputs = self.get_raw_inputs()
+            # Checking for exit signal from user/file input
             if not inputs or inputs == EXIT_SIG:
                 break
 
@@ -44,10 +46,13 @@ class Session():
                 success, resp = self.controller.execute(cmd_string)
             else:
                 success, resp = self.controller.execute(cmd_string, *args)
-
+            # If fail is not ignored, then will
+            # quit immediately after failing.
             if not success:
                 print(resp)
-                break
+                if not IGN_FAIL:
+                    break
+                continue
 
             # Write command to STDOUT
             success, output = self.controller.process_output(cmd_string, resp)
