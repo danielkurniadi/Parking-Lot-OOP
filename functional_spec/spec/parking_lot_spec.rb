@@ -35,6 +35,28 @@ Slot No.    Registration No    Colour
 EOTXT
 )
   end
+
+  it "can query slot number by car registration number" do
+    run_command(pty, "park KA-11-HH-8141 Black\n")
+    run_command(pty, "slot_number_for_registration_number KA-11-HH-8141\n")
+    expect(fetch_stdout(pty)).to end_with("1\n")
+  end
+
+  it "can query slot numbers by car color" do
+    run_command(pty, "park KA-01-IH-3141 Black\n")
+    run_command(pty, "park KA-02-UH-1241 White\n")
+    run_command(pty, "park KA-05-HG-2211 White\n")
+    run_command(pty, "slot_numbers_for_cars_with_colour White\n")
+    expect(fetch_stdout(pty)).to end_with("2, 3\n")
+  end
+
+  it "can query registration numbers by car color" do
+    run_command(pty, "park KA-01-IH-3141 Black\n")
+    run_command(pty, "park KA-02-UH-1241 White\n")
+    run_command(pty, "park KA-05-HG-2211 White\n")
+    run_command(pty, "registration_numbers_for_cars_with_colour White\n")
+    expect(fetch_stdout(pty)).to end_with("KA-02-UH-1241, KA-05-HG-2211\n")
+  end
   
   pending "add more specs as needed"
 end
