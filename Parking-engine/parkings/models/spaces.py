@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from parkings.models.vehicle import Car
 from parkings.models.helpers.query_mixins import CarsQueryMixin
 
@@ -14,7 +15,7 @@ class Slots(object):
     def size(self):
         return self._size
 
-    # abstract class method
+    @abstractmethod
     def start_new(self, size):
         """ Start new parking lot or reset.
         Args:
@@ -24,7 +25,7 @@ class Slots(object):
         self._slots = [None]* self._size
         return size
 
-    # abstract class method
+    @abstractmethod
     def get(self, slot_id):
         """ Get an item at slots with specified number.
         Args:
@@ -33,13 +34,14 @@ class Slots(object):
         """
         return self._slots[slot_id-1]
 
+    @abstractmethod
     def get_all(self):
         """ Get all items in the slots
         Returns: [Vehicle] list of vehicle object
         """
         return [item for item in self._slots]
 
-    # abstract class method
+    @abstractmethod
     def add(self, slot_id, vehicle):
         """ Add a car in slots array and return the slot id if successful, 
         else return -1.
@@ -53,7 +55,7 @@ class Slots(object):
             return slot_id
         return -1
 
-    # abstract class method
+    @abstractmethod
     def is_slot_empty(self, slot_id):
         """ Check if slot is empty
         Args:
@@ -64,7 +66,7 @@ class Slots(object):
             return False
         return True
 
-    # abstract class method
+    @abstractmethod
     def count_vehicle(self):
         """Counting number of vehicle (not None object) in slots array
         """
@@ -74,7 +76,7 @@ class Slots(object):
                 count +=1
         return count
 
-    # abstract class method
+    @abstractmethod
     def delete(self, slot_id):
         """Delete a vehicle 
         """
@@ -84,7 +86,7 @@ class Slots(object):
         self._slots[slot_id-1] = None
         return slot_id
 
-    # abstract class method
+    @abstractmethod
     def wipe_all(self):
         """ Delete all vehicles in the slots 
         """
@@ -102,6 +104,13 @@ class CarSlots(Slots, CarsQueryMixin):
     """
 
     def park(self, regnum, color):
+        """Park the incoming car with logic: car is assigned toempty slot nearest to parking gate (neares to slot number 1)
+        Args:
+            regnum (str): car registration number
+            color (str): car color
+        Returns:
+            slot_id (int): slot number allocated for the car
+        """
         slot_id = self.get_nearest_available_id()
 
         # Check if there is slot available

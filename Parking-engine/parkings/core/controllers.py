@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from parkings.core.commands import Command
 from parkings.models.vehicle import Car
 from parkings.models.spaces import CarSlots
@@ -7,9 +8,13 @@ from parkings.core.helpers.supports import FormatSupport
 EXIT_SIG = "Exit"
 
 class BaseController():
+    """ Abstract class for Controller class
+    """
+    @abstractmethod
     def execute(self, cmd_string, *args):
         pass
 
+    @abstractmethod
     def process_output(self, cmd_string, resp):
         pass
 

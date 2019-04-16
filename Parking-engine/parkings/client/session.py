@@ -46,10 +46,10 @@ class Session():
                 success, resp = self.controller.execute(cmd_string)
             else:
                 success, resp = self.controller.execute(cmd_string, *args)
-            # If fail is not ignored, then will
-            # quit immediately after failing.
+            # If fail is not ignored, then will quit immediately after failing.
             if not success:
-                print(resp)
+                if DEBUG:
+                    print(resp)
                 if not IGN_FAIL:
                     break
                 continue
