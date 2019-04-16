@@ -1,10 +1,19 @@
 # Parking-engine
 
+## Problem Statement
+Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. 
+The entire lot is a single row of spaces — so that space 0 is the one closest to the entrance. 
+There are a finite number of cars randomly parked in the lot, as people come and go as they wish. 
+A new car has just arrived outside the lot, and the driver asks you, “Where is the closest open parking space?”
+
+This OOP problem might be simple, but when we start to think of adding flexibility and extensibility to our parking lot system we might
+sacrifice some simplicity there. Indeed, no model is right/perfect and this makes the problem interesting. You can build a simple system with 100 lines of python, or you can build it with backend-database-ORM tools and deploy it online as a service online hosting millions of lines of codes just for this problem.
+
+## Getting Started & Setup
 Parking-engine is a solution engineered for parking lot problem. Parking-engine is written in Python3 and has testing suite available in Ruby (functional and spec tests) and Python (unit-tests). 
 
 This project needs [Ruby](https://www.ruby-lang.org/en/documentation/installation/) and [Python](https://www.python.org/), followed by some libraries.
 
-## Setup
 ### Ruby
 First, install [Ruby](https://www.ruby-lang.org/en/documentation/installation/). Then run the following commands under the `functional_spec` dir.
 
