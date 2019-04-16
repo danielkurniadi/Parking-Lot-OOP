@@ -1,5 +1,15 @@
 #!/bin/bash
 
-source ./bin/start_virtualenv.sh
-cd ./Parking-engine
-python3 -m nose
+# This variable contains absolute path of this `parking_lot` script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+ROOT_DIR="$DIR/../"
+
+VENV="$ROOT_DIR/.virtualenv/bin/"
+
+# Activate virtualenv
+$ROOT_DIR/start_virtualenv.sh
+source $VENV/activate
+
+# Run unit-tests
+python -m nose -w $ROOT_DIR/Parking-engine
+

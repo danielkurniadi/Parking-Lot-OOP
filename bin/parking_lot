@@ -5,9 +5,11 @@
 # it.
 
 # This variable contains absolute path of this `parking_lot` script
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-ROOT_DIR = "$DIR/../"
 
-cd $ROOT_DIR
-echo "$(pwd)"
-python3 "Parking-engine/manage.py" $1
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+ROOT_DIR="$DIR/../"
+
+PYTHON="$ROOT_DIR/.virtualenv/bin/python"
+
+# cd $ROOT_DIR
+$PYTHON "$ROOT_DIR/Parking-engine/manage.py" $1
