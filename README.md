@@ -1,13 +1,34 @@
 # Parking-engine
 
 ## Problem Statement
-Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. 
+Imagine a one-dimensional parking lot (meaning car slots are arranged in lengthwise).
+Each parking space is given a natural index, starting with 0, 1, 2, 3, … to n, where n < inf and n is specified by user (you).
 The entire lot is a single row of spaces — so that space 0 is the one closest to the entrance. 
 There are a finite number of cars randomly parked in the lot, as people come and go as they wish. 
 A new car has just arrived outside the lot, and the driver asks you, “Where is the closest open parking space?”
 
-This OOP problem might be simple, but when we start to think of adding flexibility and extensibility to our parking lot system we might
-sacrifice some simplicity there. Indeed, no model is right/perfect and this makes the problem interesting. You can build a simple system with 100 lines of python, or you can build it with backend-database-ORM tools and deploy it online as a service online hosting millions of lines of codes just for this problem.
+This OOP problem might be simple, but when we start to think of adding flexibility and extensibility to our parking lot system we might sacrifice some simplicity there. Indeed, no model is right/perfect and this makes the problem interesting. You can build a simple system with 100 lines of python, or you can build it with backend-database-ORM tools and make it scalable for hosting millions of car with flexiblility to adhere any specs. Certainly the later one will use enourmous lines of codes just for this problem but maybe you can sell it! (lol... enough said let's go!).
+
+### Assumption
+Before we go...
+- One dimensional parking lots, where each car slots are arrange in lengthwise.
+- Every vehicle is same of same type and assumed a car. 
+- Every car has color and car plate number, thus the plate number is unique for all car.
+- Any car can occupy any carslots as long as it's empty.
+
+### Specs
+One last thing...
+- Initiate/create one parking lot at a time with specified number of carslots.
+- New/incoming vehicle is routed to the empty carslots nearest to the entrance gate. If there isn't empty slot, then it cannot park in the lot (not assigned)
+- Feature to query car(s) and where they park (indicated by carslot index). Query car(s) by car color and car plate number.  
+
+## Future Improvement
+Yes I'm a futurist. Let's talk about future improvement first. What can be improved? Well, what kind of parking lots that shaped as 1-Dimensional (You get the idea hmm)?
+Hence we can improve lot of things on:
+- Extend to solve problems where parking lots is 2 dimensional (most likely a square/rect spaces) or even 3 dimensional (like a parking storey, it has shape of level x length x width).
+- With different parking lots shape described above, we should introduce a new routing logics (e.g. find the closest slot where distance measured by eucledian distance).
+- Introduce different vechicle as currently the solution assume everything is a car. Perhaps introduce a vallet parking, motorcycle park, etc.
+- Add billing/timer for checkout pay. Hence implement billing system as well.
 
 ## Getting Started & Setup
 Parking-engine is a solution engineered for parking lot problem. Parking-engine is written in Python3 and has testing suite available in Ruby (functional and spec tests) and Python (unit-tests). 
@@ -101,7 +122,5 @@ Represent structural areas within a parking lot. *Slots* can be regarded as one-
 
 **Vehicle**
 Vehicle objects represent one vehicle that take up a slot in the parking lot.
-
-
 
 
